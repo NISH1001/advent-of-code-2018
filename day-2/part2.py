@@ -4,14 +4,14 @@ from collections import Counter
 
 def is_correct(id1, id2):
     count = 0
+    differing_ids = []
     for i in range(len(id1)):
         c1 = id1[i]
         c2 = id2[i]
         if c1 != c2:
             count += 1
-        if count > 1:
-            return False
-    return True
+            differing_ids.append(i)
+    return (True, differing_ids) if count == 1 else (False, differing_ids)
 
 
 def main():
@@ -22,16 +22,17 @@ def main():
             for j, l2 in enumerate(lines):
                 if i == j:
                     continue
-                c = is_correct(l1, l2)
+                c, ids = is_correct(l1, l2)
                 if c:
-                    correct_ids.append((l1, l2))
-    res = set()
-    for pair in correct_ids:
-        print(pair, len(pair[0]))
-        common = set(pair[0]).intersection(set(pair[1]))
-        print(len(common))
-        res.update(common)
-    print(len(res))
+                    correct_ids.append((l1, l2, ids))
+    res = ""
+    for pair in correct_ids[:1]:
+        p1 = list(pair[0])
+        p2 = list(pair[1])
+        i = pair[-1][-1]
+        del p1[i]
+        del p2[i]
+        print(''.join(p1))
 
 
 if __name__ == "__main__":
