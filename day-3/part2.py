@@ -17,13 +17,11 @@ def main():
     for cn, x, y, w, h in claims:
         fabric[y:y+h, x:x+w] += 1
 
-
-
-    print(np.sum(np.where(fabric > 1, 1, 0)))
-    # for cn, x, y, w, h in claims:
-    #     claim = fabric[y:y+h, x:x+w]
-    #     if claim.max() == 1:
-    #         print(cn)
+    for cn, x, y, w, h in claims:
+        claim = fabric[y:y+h, x:x+w]
+        if claim.max() == 1:
+            print(cn)
+            break
 
 if __name__ == "__main__":
     main()
