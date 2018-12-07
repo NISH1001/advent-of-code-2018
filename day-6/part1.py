@@ -6,21 +6,21 @@ from sklearn.metrics.pairwise import manhattan_distances
 import itertools
 from collections import Counter
 
-def solve(coords):
+def voronoi(coords, width=800, height=800, use_max=False):
     coord_matrix = np.array(coords)
-    # print(coord_matrix)
     X, Y = zip(*coords)
-    n = 1000
-    w, h = max(X) + 2, max(Y) + 2
+    if use_max:
+        w, h = max(X) + 2, max(Y) + 2
+    else:
+        w, h = width, height
+
     xx = list(range(w))
     yy = list(range(h))
     mat = np.array(list(itertools.product(xx, yy)))
-    print(mat.shape, coord_matrix.shape)
+
     distances = manhattan_distances(mat, coord_matrix)
-    print(distances.shape)
     dist_max_idx = np.argmin(distances, axis=1)
-    print(dist_max_idx.shape)
-    print(np.unique(dist_max_idx))
+
     arr = np.zeros((w, h))
     for i, p in enumerate(mat):
         r, c = p
@@ -30,10 +30,10 @@ def solve(coords):
 
     # plt.plot(xx, yy, marker='.', color='k', linestyle='none')
     plt.imshow(arr)
-    plt.savefig('voronoi.jpg')
+    # plt.savefig('voronoi.jpg')
     plt.show()
 
-def solve2(coords):
+def part2(coords):
     coords = np.array(coords)
     xvalues = np.arange(coords[:,0].max())
     yvalues = np.arange(coords[:,1].max())
@@ -57,7 +57,7 @@ def main():
         for line in f:
             x, y = line.strip().split(',')
             coords.append((int(x), int(y)))
-    solve(coords)
+    voronoi(coords, 800, 800)
 
 
 if __name__ == "__main__":
