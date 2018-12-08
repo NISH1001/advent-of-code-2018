@@ -26,6 +26,7 @@ So, we generate every possible points on the plane using cross-product between x
     0 0  
     0 1  
     1 0  
+    1 1  
     2 0  
     2 1  
     3 0  
@@ -46,7 +47,7 @@ yy = list(range(h))
 mat = np.array(list(itertools.product(xx, yy)))
 ```
 
-Here, `coord_matrix` is a matrix of size **nX2** and `mat` is the matrix of size **(width, height)**.  
+Here, `coord_matrix` is a matrix of size **nX2** and `mat` is the matrix of size **(width X height, 2)**.  
 `itertools` module is used to find the [cross product](https://en.wikipedia.org/wiki/Cross_product). 
 
 **Distance Matrix**  
