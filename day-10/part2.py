@@ -4,7 +4,6 @@
 import re
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import animation
 
 def get_data(filename):
     points, velocities = [], []
@@ -26,6 +25,7 @@ def get_area(bbox):
     w, h = abs(x2- x1), abs(y2 - y1)
     return w*h
 
+
 def main():
     points, velocities= get_data('input')
     scale = 100
@@ -33,19 +33,27 @@ def main():
     velocities = np.array(velocities)
     timestep = 0.01
     areas = []
-    plt.figure(figsize=(5, 1))
+    plt.figure(figsize=(5, 5))
     start = 106.6
     end = 107
-    # The alignment is at 106.81 time
-    for i in np.arange(start, end, timestep):
-        print(i)
-        # x = points[:, 0] + i * velocities[:, 0]
-        # y = -points[:, 1] + i * velocities[:, 1]
-        p = points + i*velocities
+    """
+        Here, I propose my own optimization technique:
+
+            - I calculate the bounding box for every timestep.
+            - For each timestep I calculate the area of the bounding box
+            - I keep track of each area
+            - And find the time where area is minimum. My proposition is that
+            during the alignment, the points seem to fit in the minimum box
+    """
+
+    times = np.arange(start, end, timestep)
+    for t in times:
+        p = points + t*velocities
         x, y = p[:, 0], p[:, 1]
-        plt.clf()
-        plt.scatter(x, -y, s=50)
-        plt.savefig("images/{:05f}.jpg".format(i))
+        bbox = get_bounding_box(p)
+        areas.append(get_area(bbox))
+    idx = np.argmin(areas)
+    print(int(times[idx] * scale)) # since I have scaled the point initially
 
 if __name__ == "__main__":
     main()
